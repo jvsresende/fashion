@@ -45,8 +45,7 @@ class _EscolherState extends State<Escolher> {
 
         _baixo = queryBaixo.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
 
-        // Chame aleatorio() para carregar as primeiras roupas
-        aleatorio();
+           aleatorio();
       }
     } catch (e) {
       print('Erro ao carregar as roupas: $e');
