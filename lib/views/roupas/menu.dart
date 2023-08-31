@@ -6,13 +6,8 @@ import 'package:firebase/views/roupas/escolha.dart';
 import 'package:firebase/views/roupas/adicionar.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-
-
-
-//indice de seleção da tela
 int _selectedIndex = 0;
 
-//vetor de telas a serem utilizadas
 List<Widget> _stOptions = <Widget>[
   Todas(),
   Adicionar(),
@@ -22,7 +17,6 @@ List<Widget> _stOptions = <Widget>[
 class Navegar extends StatefulWidget {
   int _opcao;
 
-  //contrutor passando o indice da tela selecionada
   Navegar(this._opcao);
 
   @override
@@ -31,7 +25,7 @@ class Navegar extends StatefulWidget {
 
 class _NavegarState extends State<Navegar> {
 
-  //construtor
+  
   _NavegarState(this._opcao);
   int _opcao;
 
@@ -43,10 +37,9 @@ class _NavegarState extends State<Navegar> {
 
   Widget build(BuildContext context) {
     return  Scaffold(
-      //corpo da aplicação, aqui são setadas as telas
-      body: _stOptions.elementAt(_selectedIndex),
+       body: _stOptions.elementAt(_selectedIndex),
 
-      //botões do BN
+    
     bottomNavigationBar: BottomNavigationBar(
         backgroundColor: um,
       showUnselectedLabels: false,
@@ -79,9 +72,9 @@ class _NavegarState extends State<Navegar> {
         currentIndex: _selectedIndex,
 
         selectedItemColor: dois,
-        //greenAccent,
+       
         onTap:
-        _onItemTapped, //chama o métdodo onItemTapped ao clicar no botao do BTNNavigation
+        _onItemTapped, 
       ),
     );
   }
