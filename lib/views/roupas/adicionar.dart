@@ -409,23 +409,6 @@ class _AdState extends State<Ad> {
                     ),
                   ],
                 ),
-                Divider(color: dois,),
-                Container(
-                  width: 350,
-                  child: TextField(
-                        controller: tecDescricao,
-                        textAlignVertical: TextAlignVertical.center,
-                        autofocus: true,
-                        cursorColor: um,
-                        style: TextStyle(color:um),
-                        decoration:
-                        InputDecoration(
-                          hintMaxLines: 1,
-                          hintText:'Descrição da Roupa',
-                        ),
-                        maxLines: 4,
-                      )
-                ),
                 SizedBox(height:25),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
