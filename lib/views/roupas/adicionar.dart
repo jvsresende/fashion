@@ -40,8 +40,8 @@ class Adicionar extends  StatelessWidget {
         ),
         unselectedWidgetColor: um,
         snackBarTheme: SnackBarThemeData(
-          backgroundColor: tres, // Defina a cor de fundo desejada
-          contentTextStyle: TextStyle(color: dois), // Defina o estilo do texto do SnackBar
+          backgroundColor: tres, 
+          contentTextStyle: TextStyle(color: dois), 
         ),
       ),
       home: const Ad(title: 'Adicionar'),
@@ -104,11 +104,10 @@ class _AdState extends State<Ad> {
       }
       String? hex =cor != null ? '#${cor!.value.toRadixString(16).substring(2).toUpperCase()}' : '';
 
-      // Crie um mapa com as informações que deseja salvar
-      Map<String, dynamic> dados = {
+        Map<String, dynamic> dados = {
         'userId':userId,
-        'imagem': urlImagem, // Substitua 'URL_da_imagem' pela URL da imagem, caso você a esteja salvando no Firebase Storage, por exemplo.
-        'cor': hex, // Salve a cor como um valor numérico, ou qualquer outro formato desejado.
+        'imagem': urlImagem, 
+        'cor': hex, 
         'categoria': tf,
         'ocasiao': selecionad,
         'temperatura': opc,
@@ -173,7 +172,7 @@ class _AdState extends State<Ad> {
     super.initState();
     User? user = _auth.currentUser;
     if (user != null) {
-      userId = user.uid; // Atribua o ID do usuário à variável userId
+      userId = user.uid; 
     }
   }
 
@@ -218,7 +217,7 @@ class _AdState extends State<Ad> {
                           color: selecionada ? Colors.transparent : um,
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: ClipRRect( // ClipRRect para garantir que a imagem também tenha bordas arredondadas
+                        child: ClipRRect( 
                             borderRadius: BorderRadius.circular(10.0),
                             child: selecionada
                                 ? Image.file(_imagens.last, fit:BoxFit.cover)
