@@ -69,7 +69,6 @@ class _AdState extends State<Ad> {
   String? selecionado;
   String? selecionad;
   String? opc;
-  TextEditingController tecDescricao = TextEditingController();
   bool? tf;
   User? user = _auth.currentUser;
 
@@ -77,15 +76,14 @@ class _AdState extends State<Ad> {
   Future<String> enviarImagem(File imagem) async {
     try {
       String userId = _auth.currentUser?.uid ?? '';
-      // Crie uma referência para o Firebase Storage
+      
       Reference ref = FirebaseStorage.instance
           .ref()
           .child('roupas/${DateTime.now().millisecondsSinceEpoch}.jpg');
 
-      // Carregue a imagem croppada para o Firebase Storage
       await ref.putFile(imagem);
 
-      // Obtenha a URL de download da imagem
+      
       String url = await ref.getDownloadURL();
       return url;
     } catch (e) {
@@ -114,19 +112,16 @@ class _AdState extends State<Ad> {
         'categoria': tf,
         'ocasiao': selecionad,
         'temperatura': opc,
-        'descricao': tecDescricao.text,
-         // Substitua 'Sua_descrição_aqui' pela descrição informada pelo usuário no TextField.
-      };
+         };
 
-      // Salve os dados no Firestore
       await FirebaseFirestore.instance.collection('roupas').add(dados);
 
-      // Exemplo de exibição de um SnackBar para informar que os dados foram salvos com sucesso
+      
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Dados salvos com sucesso!')),
       );
 
-      // Limpe os campos após salvar os dados
+      
       setState(() {
         _imagens.clear();
         hex = null;
@@ -139,8 +134,7 @@ class _AdState extends State<Ad> {
       });
 
     } catch (e) {
-      // Exemplo de exibição de um SnackBar em caso de erro
-      ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Erro ao salvar os dados: $e')),
       );
     }
