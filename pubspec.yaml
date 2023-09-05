@@ -1,5 +1,5 @@
 name: firebase
-description: A new Flutter project.
+description: A new wardrobe app, that helps choose looks to use
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -46,7 +46,6 @@ dependencies:
   image_cropper: ^5.0.0
   firebase_auth: ^4.7.2
   flutter_launcher_icons: ^0.13.1
-  flutter_progress_hud: ^2.0.2
 
 
 dev_dependencies:
