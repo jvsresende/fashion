@@ -19,7 +19,7 @@ class _LoginState extends State<Login> {
   TextEditingController tecEmail = TextEditingController();
   TextEditingController tecPass = TextEditingController();
   FirebaseAuth _auth = FirebaseAuth.instance;
-
+  bool carregando = false;
   Future<void> fazerLogin() async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
@@ -97,8 +97,24 @@ class _LoginState extends State<Login> {
             SizedBox(height:30),
             ElevatedButton(
                 style: ElevatedButton.styleFrom(foregroundColor: tres,minimumSize: Size(270,50),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                onPressed:fazerLogin,
-                child: Text('Entrar', style: TextStyle(fontStyle: FontStyle.italic,color: tres,fontSize: 26),))
+                onPressed: ()async{
+                if (carregando) return;
+                setState(() => carregando = true);
+                try {
+                  await fazerLogin();
+                  setState(() => carregando = false);
+                } catch (e) {
+                  setState(() => carregando = false);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Erro ao carregar os dados: $e')),
+                  );
+                }
+              },
+              child: carregando ? Row(children: [
+                CircularProgressIndicator(color:dois),
+                Text('Carregando',style:TextStyle(fontSize:23,fontStyle:FontStyle.italic),)
+              ],):Text('Login',style:TextStyle(fontSize:30,fontStyle:FontStyle.italic),),
+            )
           ],
         ),)
 
