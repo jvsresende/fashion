@@ -71,7 +71,8 @@ class _AdState extends State<Ad> {
   String? opc;
   bool? tf;
   User? user = _auth.currentUser;
-
+  bool carregando = false;
+  
   String userId = '';
   Future<String> enviarImagem(File imagem) async {
     try {
@@ -149,22 +150,6 @@ class _AdState extends State<Ad> {
         selecionada = true;
       });
     }
-   /* if(selecionada ==true){
-      File cropped = (await ImageCropper().cropImage(
-        sourcePath: _imagens.last.path,
-        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-        compressQuality: 100,
-        maxWidth: 200,
-        maxHeight: 200,
-        uiSettings:[AndroidUiSettings(
-            toolbarColor: tres,
-            statusBarColor: tres.shade200,
-            backgroundColor: dois)],
-        compressFormat: ImageCompressFormat.jpg,
-
-      )) as File;
-   _imagens.last=cropped;
-    }*/
   }
 
   @override
@@ -406,21 +391,47 @@ class _AdState extends State<Ad> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    ElevatedButton(
+                   ElevatedButton(
                         style: ElevatedButton.styleFrom(backgroundColor: dois,
                             foregroundColor: tres,
                             minimumSize: Size(100,50),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                        onPressed: (){},
+                        onPressed: (){
+                          setState(() {
+                            _imagens.clear();
+                            cor =null;
+                            tf = null;
+                            selecionada = false;
+                            selecionado = null;
+                            selecionad = null;
+                            opc = null;
+                          });
+                        },
                         child: Text('Cancelar',style: TextStyle(fontSize:30,fontStyle:FontStyle.italic),)),
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(backgroundColor: tres,
                             foregroundColor: dois,
                             minimumSize: Size(200,50),
+                            maximumSize: Size(200,50),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                        onPressed: salvarDados,
-                        child: Text('Salvar',style:  TextStyle(fontSize:30,fontStyle:FontStyle.italic),)
-                    )
+                        onPressed: ()async{
+                          if (carregando) return;
+                          setState(() => carregando = true);
+                          try {
+                            await salvarDados();
+                            setState(() => carregando = false);
+                          } catch (e) {
+                            setState(() => carregando = false);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Erro ao salvar os dados: $e')),
+                            );
+                          }
+                        },
+                        child: carregando ? Row(children: [
+                          CircularProgressIndicator(color:um),
+                          Text('Enviando',style:TextStyle(fontSize:23,fontStyle:FontStyle.italic),)
+                        ],):Text('Enviar',style:TextStyle(fontSize:30,fontStyle:FontStyle.italic),),
+
                   ],
                 )
               ],
