@@ -18,7 +18,7 @@ class _CadastroState extends State<Cadastro> {
   TextEditingController tecEmail = TextEditingController();
   TextEditingController tecPass = TextEditingController();
   TextEditingController tecPass1 = TextEditingController();
- 
+  bool carregando = false;
   FirebaseAuth _auth = FirebaseAuth.instance;
 
 
@@ -168,15 +168,23 @@ class _CadastroState extends State<Cadastro> {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  onPressed: salvarDados,
-                  child: Text(
-                    'Cadastrar',
-                    style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      color: tres,
-                      fontSize: 26,
-                    ),
-                  ),
+                  onPressed: ()async{
+    if (carregando) return;
+    setState(() => carregando = true);
+    try {
+    await salvarDados();
+    setState(() => carregando = false);
+    } catch (e) {
+    setState(() => carregando = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text('Erro ao salvar os dados: $e')),
+    );
+    }
+    },
+      child: carregando ? Row(children: [
+        CircularProgressIndicator(color:um),
+        Text('Cadastrando',style:TextStyle(fontSize:23,fontStyle:FontStyle.italic),)
+      ],):Text('Cadastrar',style:TextStyle(fontSize:30,fontStyle:FontStyle.italic),),
                 ),
               ],
             ),
