@@ -1,14 +1,10 @@
 import 'package:firebase/colors.dart';
 import 'package:firebase/views/entrada/redefinicao.dart';
-import 'package:firebase/views/roupas/menu.dart';
-import 'package:firebase/views/roupas/todas.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'inicio.dart';
-
-
+import '../../services/auth_service.dart';
+import '../roupas/menu.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -18,18 +14,13 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController tecEmail = TextEditingController();
   TextEditingController tecPass = TextEditingController();
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  AuthService authService = AuthService();
   bool carregando = false;
   Future<void> fazerLogin() async {
     try {
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: tecEmail.text,
-        password: tecPass.text,
-      );
+      await authService.login(context,tecEmail.text, tecPass.text);
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Navegar(0)));
 
-      if (userCredential.user != null) {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Navegar(0)));
-      }
     } catch (e) {
       showDialog(
           context: context,
@@ -96,7 +87,9 @@ class _LoginState extends State<Login> {
             ),
             SizedBox(height:30),
             ElevatedButton(
-                style: ElevatedButton.styleFrom(foregroundColor: tres,minimumSize: Size(270,50),shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                style: ElevatedButton.styleFrom(foregroundColor: tres,minimumSize: Size(270,50),
+                    maximumSize:Size(270,50),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                 onPressed: ()async{
                 if (carregando) return;
                 setState(() => carregando = true);

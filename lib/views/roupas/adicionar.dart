@@ -5,7 +5,6 @@ import 'package:eye_dropper/eye_dropper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:firebase/colors.dart';
@@ -40,8 +39,8 @@ class Adicionar extends  StatelessWidget {
         ),
         unselectedWidgetColor: um,
         snackBarTheme: SnackBarThemeData(
-          backgroundColor: tres, 
-          contentTextStyle: TextStyle(color: dois), 
+          backgroundColor: tres,
+          contentTextStyle: TextStyle(color: dois),
         ),
       ),
       home: const Ad(title: 'Adicionar'),
@@ -61,6 +60,7 @@ class Ad extends StatefulWidget {
   State<Ad> createState() => _AdState();
 }
 FirebaseAuth _auth = FirebaseAuth.instance;
+
 class _AdState extends State<Ad> {
 
   Color? cor;
@@ -176,6 +176,7 @@ class _AdState extends State<Ad> {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: const Text('Selecione a Imagem'),
+                            content: const Text("Imagem de prefêrencia seja quadrada (1:1)"),
                             actions: [
                               TextButton(
                                 onPressed: () {
@@ -214,7 +215,7 @@ class _AdState extends State<Ad> {
                     )
                 ),
                 ),
-                SizedBox(height:25),
+                SizedBox(height:40),
                     GestureDetector(
                     onTap: () {
                       EyeDropper.enableEyeDropper(context, (color) {
@@ -245,7 +246,7 @@ class _AdState extends State<Ad> {
 
                     ),
                   ),
-                SizedBox(height:25),
+                SizedBox(height:30),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children:[
@@ -327,7 +328,7 @@ class _AdState extends State<Ad> {
                   ),
                   ]
                 ),
-                Divider(color:dois),
+               SizedBox(height:40),
                 Text("Temperatura:", style: TextStyle(fontSize: 28,color: um),),
                 Row(
                   children: <Widget>[
@@ -344,7 +345,7 @@ class _AdState extends State<Ad> {
                                 });
                               },
                             ),
-                            const Text('Frio', style: TextStyle(color:um)),
+                            const Text('Frio', style: TextStyle(color:tres)),
                           ],
                         ),
                       ),
@@ -362,7 +363,7 @@ class _AdState extends State<Ad> {
                                 });
                               },
                             ),
-                            Text('Médio', style: TextStyle(color:um)),
+                            Text('Médio', style: TextStyle(color:tres)),
                           ],
                         ),
                       ),
@@ -380,14 +381,14 @@ class _AdState extends State<Ad> {
                                 });
                               },
                             ),
-                            Text('Quente', style: TextStyle(color:um)),
+                            Text('Quente', style: TextStyle(color:tres)),
                           ],
                         ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height:25),
+                SizedBox(height:40),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -432,6 +433,7 @@ class _AdState extends State<Ad> {
                           Text('Enviando',style:TextStyle(fontSize:23,fontStyle:FontStyle.italic),)
                         ],):Text('Enviar',style:TextStyle(fontSize:30,fontStyle:FontStyle.italic),),
 
+                    ),
                   ],
                 )
               ],

@@ -60,3 +60,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'fashion-c377b.appspot.com',
   );
 }
+

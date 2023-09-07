@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:firebase/colors.dart';
 import 'package:firebase/views/roupas/todas.dart';
 import 'package:firebase/views/roupas/escolha.dart';
 import 'package:firebase/views/roupas/adicionar.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+
 
 int _selectedIndex = 0;
 
@@ -25,7 +25,7 @@ class Navegar extends StatefulWidget {
 
 class _NavegarState extends State<Navegar> {
 
-  
+
   _NavegarState(this._opcao);
   int _opcao;
 
@@ -37,12 +37,12 @@ class _NavegarState extends State<Navegar> {
 
   Widget build(BuildContext context) {
     return  Scaffold(
-       body: _stOptions.elementAt(_selectedIndex),
+      body: _stOptions.elementAt(_selectedIndex),
 
-    
-    bottomNavigationBar: BottomNavigationBar(
+
+      bottomNavigationBar: BottomNavigationBar(
         backgroundColor: um,
-      showUnselectedLabels: false,
+        showUnselectedLabels: false,
         items:  <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon:Icon(
@@ -72,9 +72,9 @@ class _NavegarState extends State<Navegar> {
         currentIndex: _selectedIndex,
 
         selectedItemColor: dois,
-       
+
         onTap:
-        _onItemTapped, 
+        _onItemTapped,
       ),
     );
   }

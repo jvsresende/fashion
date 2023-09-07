@@ -1,12 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase/colors.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:firebase/views/entrada/inicio.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:flutter_progress_hud/flutter_progress_hud.dart';
+import '../../services/auth_service.dart';
+
 
 class Cadastro extends StatefulWidget {
   @override
@@ -14,54 +12,17 @@ class Cadastro extends StatefulWidget {
 }
 
 class _CadastroState extends State<Cadastro> {
-  TextEditingController tecNome = TextEditingController();
   TextEditingController tecEmail = TextEditingController();
   TextEditingController tecPass = TextEditingController();
   TextEditingController tecPass1 = TextEditingController();
   bool carregando = false;
-  FirebaseAuth _auth = FirebaseAuth.instance;
-
+  AuthService authService = AuthService();
 
   Future<void> salvarDados() async {
-    final progress = ProgressHUD.of(context);
     try {
-      progress!.showWithText("Salvando Dados");
       if (tecPass.text == tecPass1.text) {
-        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-          email: tecEmail.text,
-          password: tecPass.text,
-        );
-
-        if (userCredential.user != null) {
-          Map<String, dynamic> dados = {
-            'nome': tecNome.text,
-            'email': tecEmail.text,
-          };
-
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(userCredential.user!.uid)
-              .set(dados);
-
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                    title: const Text('Cadastrado com Sucesso'),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Principal()));
-                        },
-                        child:const Text('Página Principal',style: TextStyle(color:tres),),
-                      )
-                    ]
-                );
-              }
-          );
-        }
+        await authService.registrar(context,tecEmail.text, tecPass.text);
       } else if(tecPass.text!=tecPass1.text){
-        progress!.dismiss();
         showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -83,9 +44,7 @@ class _CadastroState extends State<Cadastro> {
             }
         );
       };
-
     } catch (e) {
-      progress!.dismiss();
       showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -99,7 +58,6 @@ class _CadastroState extends State<Cadastro> {
                         tecPass.text = '';
                         tecPass1.text = '';
                         tecEmail.text = '';
-                        tecNome.text = '';
                       });
                       },
                     child:const Text('Okay',style: TextStyle(color:tres),),
@@ -148,9 +106,7 @@ class _CadastroState extends State<Cadastro> {
                     ),
                   ),
                 ),
-                SizedBox(height: 60),
-                Name(tecNome),
-                SizedBox(height: 15),
+                SizedBox(height: 70),
                 Email(tecEmail),
                 SizedBox(height: 15),
                 Pass(tecPass),
@@ -159,11 +115,12 @@ class _CadastroState extends State<Cadastro> {
                 SizedBox(height: 15),
                 Text('A Senha deverá ter no Minimo 6 Caracteres',style: TextStyle(color:dois,fontSize: 15),),
                 SizedBox(height:10),
-                SizedBox(height: 60),
+                SizedBox(height: 70),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     foregroundColor: tres,
                     minimumSize: Size(270, 50),
+                    maximumSize: Size(270,50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -252,39 +209,6 @@ class Pass extends StatelessWidget {
     );
   }
 }
-
-
-class Name extends StatelessWidget {
-  TextEditingController tecNome;
-  Name(this.tecNome);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 350,
-      child: TextField(
-        controller: tecNome,
-        textAlignVertical: TextAlignVertical.center,
-        autofocus: true,
-        cursorColor: tres,
-        keyboardType: TextInputType.text, // Use TextInputType.text para nome
-        style: TextStyle(color: tres),
-        decoration: InputDecoration(
-          hintMaxLines: 1,
-          suffixIcon: Icon(
-            PhosphorIcons.regular.user,
-            size: 20.0,
-            color: tres,
-          ),
-          hintText: 'digite o nome',
-        ),
-      ),
-    );
-  }
-}
-
-
-
 
 class Pass1 extends StatelessWidget {
   TextEditingController tecPass1;
