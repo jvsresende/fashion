@@ -1,205 +1,209 @@
-  import 'package:cached_network_image/cached_network_image.dart';
-  import 'package:cloud_firestore/cloud_firestore.dart';
-  import 'package:firebase_auth/firebase_auth.dart';
-  import 'package:flutter/material.dart';
-  import 'package:phosphor_flutter/phosphor_flutter.dart';
-  import '../../colors.dart';
-  import '../../services/auth_service.dart';
-  import '../entrada/inicio.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import '../../colors.dart';
+import '../../services/auth_service.dart';
+import '../entrada/inicio.dart';
 
 
-  class Todas extends StatefulWidget {
-    @override
-    _TodasState createState() => _TodasState();
+class Todas extends StatefulWidget {
+  @override
+  _TodasState createState() => _TodasState();
+}
+
+class _TodasState extends State<Todas> {
+  List<Map<String, dynamic>> _roupas = [];
+  String userId = '';
+  String? selecionar;
+  String? filtro;
+  @override
+  void initState() {
+    super.initState();
+    carregarRoupas();
   }
 
-  class _TodasState extends State<Todas> {
-    List<Map<String, dynamic>> _roupas = [];
-    String userId = '';
-    String? selecionar;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  AuthService authService = AuthService();
 
-    @override
-    void initState() {
-      super.initState();
-      carregarRoupas();
-    }
+  Future<void> carregarRoupas() async {
+    try {
+      User? user = _auth.currentUser;
+      if (user != null) {
+        userId = user.uid;
+        QuerySnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance
+            .collection('roupas')
+            .where('userId', isEqualTo: userId)
+            .where('categoria',isEqualTo: filtro)
+            .get();
+        List<Map<String, dynamic>> roupas =
+        snapshot.docs.map((doc) => doc.data()).toList();
 
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    AuthService authService = AuthService();
-
-    Future<void> carregarRoupas() async {
-      try {
-        User? user = _auth.currentUser;
-        if (user != null) {
-          userId = user.uid;
-          QuerySnapshot<Map<String, dynamic>> snapshot =
-          await FirebaseFirestore.instance
-              .collection('roupas')
-              .where('userId', isEqualTo: userId)
-              .get();
-          List<Map<String, dynamic>> roupas =
-          snapshot.docs.map((doc) => doc.data()).toList();
-
-          setState(() {
-            _roupas = roupas;
-          });
-        }
-      } catch (e) {
-        print('Erro ao carregar as roupas: $e');
+        setState(() {
+          _roupas = roupas;
+        });
       }
+    } catch (e) {
+      print('Erro ao carregar as roupas: $e');
     }
+  }
 
-    Future<void> sair() async{
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Deseja fazer o logout?'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Cancelar', style: TextStyle(color: tres)),
-              ),
-              TextButton(
-                onPressed: () async {
-                  await  authService.logout(context);
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Principal()));
+  Future<void> sair() async{
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Deseja fazer o logout?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancelar', style: TextStyle(color: tres)),
+            ),
+            TextButton(
+              onPressed: () async {
+                await  authService.logout(context);
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Principal()));
 
-                },
-                child: const Text('Sair', style: TextStyle(color: tres)),
-              )
-            ],
-          );
-        },
-      );
-    }
+              },
+              child: const Text('Sair', style: TextStyle(color: tres)),
+            )
+          ],
+        );
+      },
+    );
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body:NestedScrollView(
+        headerSliverBuilder: (context, _) => [
+          SliverAppBar(
+            backgroundColor: um,
+            automaticallyImplyLeading: false,
+            expandedHeight: 0,
 
-    @override
-    Widget build(BuildContext context) {
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: um,
-          automaticallyImplyLeading: false, // Disable the back button
-          title: PreferredSize(
-            preferredSize: Size.fromHeight(kToolbarHeight),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                PopupMenuButton<String>(
-                  onSelected: (String choice) {
-                    if (choice == 'Opção 1') {
-                      // Lógica para a Opção 1
-                    } else if (choice == 'Opção 2') {
-                    }
-
-                  },
-                  itemBuilder: (BuildContext context) {
-                    return <PopupMenuEntry<String>>[
-                      PopupMenuItem<String>(
-                        value: '',
-                        child: Text('Categoria/Resetar'),
-                      ),
-                      PopupMenuItem<String>(
-                        value: 'bc',
-                        child: Text('Blusa Manga Curta'),
-                      ),
-                      PopupMenuItem<String>(
-                        value: 'bl',
-                        child: Text('Blusa Manga Longa'),
-                      ),
-                      PopupMenuItem<String>(
-                        value: 'r',
-                        child: Text('Regata'),
-                      ),
-                      PopupMenuItem<String>(
-                        value: 'j',
-                        child: Text('Jaqueta'),
-                      ),
-                      PopupMenuItem<String>(
-                        value: 'c',
-                        child: Text('Casacos'),
-                      ),
-                      PopupMenuItem<String>(
-                        value: 'b',
-                        child: Text('Bermuda'),
-                      ),
-                      PopupMenuItem<String>(
-                        value: 'ca',
-                        child: Text('Calça'),
-                      ),
-                      PopupMenuItem<String>(
-                        value: 's',
-                        child: Text('Short'),
-                      ),
-                      PopupMenuItem<String>(
-                        value: 'sa',
-                        child: Text('Saia'),
-                      ),
-                      PopupMenuItem<String>(
-                        value: 'v',
-                        child: Text('Vestido'),
-                      ),
-                      // Adicione mais PopupMenuItems conforme necessário
-                    ];
-                  },icon: Icon(
-                  PhosphorIcons.regular.list,
-                  size: 30.0,
-                ),
-                ),
-                IconButton(
-                  icon: Icon(
-                    PhosphorIcons.regular.signOut,
+            title: PreferredSize(
+              preferredSize: Size.fromHeight(kToolbarHeight),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  PopupMenuButton<String>(
+                    onSelected: (String escolha) {
+                      if(escolha ==''){
+                        filtro=null;
+                        carregarRoupas();
+                      }else{
+                        filtro=escolha;
+                        carregarRoupas();
+                      }
+                    },
+                    itemBuilder: (BuildContext context) {
+                      return <PopupMenuEntry<String>>[
+                        PopupMenuItem<String>(
+                          value: '',
+                          child: Text('Categoria/Resetar'),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'bc',
+                          child: Text('Blusa Manga Curta'),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'bl',
+                          child: Text('Blusa Manga Longa'),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'r',
+                          child: Text('Regata'),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'j',
+                          child: Text('Jaqueta'),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'c',
+                          child: Text('Casacos'),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'b',
+                          child: Text('Bermuda'),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'ca',
+                          child: Text('Calça'),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 's',
+                          child: Text('Short'),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'sa',
+                          child: Text('Saia'),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'v',
+                          child: Text('Vestido'),
+                        ),
+                      ];
+                    },icon: Icon(
+                    PhosphorIcons.regular.list,
                     size: 30.0,
                   ),
-                  onPressed: sair,
-                ),
-              ],
-            ),
-          ),
-        ),
-        body: SafeArea(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10.0,
-              ),
-              itemBuilder: (context, index) {
-                if (index >= _roupas.length) {
-                  return Container();
-                }
-
-                Map<String, dynamic> roupa = _roupas[index];
-                String imageUrl = roupa['imagem'];
-
-                return Padding(
-                  padding: EdgeInsets.only(top: 10.0),
-                  child: Container(
-                    width: 200,
-                    height: 200,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      PhosphorIcons.regular.signOut,
+                      size: 30.0,
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: CachedNetworkImage(
-                        imageUrl: imageUrl,
-                        placeholder: (context, url) =>
-                            CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
-                        fit: BoxFit.cover,
-                      ),
+                    onPressed: sair,
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
+        body:  Container(
+          width: MediaQuery.of(context).size.width,
+          child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 5.0,
+            ),
+            itemBuilder: (context, index) {
+              if (index >= _roupas.length) {
+                return Container();
+              }
+              Map<String, dynamic> roupa = _roupas[index];
+              String imageUrl = roupa['imagem'];
+
+              return Padding(
+                padding: EdgeInsets.only(top: 10.0),
+                child: Container(
+                  width: 200,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: CachedNetworkImage(
+                      imageUrl: imageUrl,
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      fit: BoxFit.cover,
                     ),
                   ),
-                );
-              },
-              itemCount: _roupas.length,
-            ),
+                ),
+              );
+            },
+            itemCount: _roupas.length,
           ),
         ),
-      );
-    }
+      ),
+    );
   }
+}
