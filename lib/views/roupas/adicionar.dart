@@ -5,6 +5,7 @@ import 'package:eye_dropper/eye_dropper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hsluv/hsluvcolor.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:firebase/colors.dart';
@@ -72,6 +73,8 @@ class _AdState extends State<Ad> {
   bool? tf;
   User? user = _auth.currentUser;
   bool carregando = false;
+  HSLColor? hslColor;
+  String? hsluv;
   
   String userId = '';
   Future<String> enviarImagem(File imagem) async {
@@ -93,52 +96,54 @@ class _AdState extends State<Ad> {
     }
   }
 
-
   Future<void> salvarDados() async {
     try {
       String urlImagem = await enviarImagem(_imagens.last);
 
       if(selecionado == 'j' || selecionado == 'c' || selecionado == 'bc' || selecionado == 'bl' || selecionado == 'r') {
         tf = true;
-      }else if(selecionado == 'b' || selecionado == 'ca' || selecionado == 's' || selecionado == 'sa'){
-        tf=false;
+      } else if(selecionado == 'b' || selecionado == 'ca' || selecionado == 's' || selecionado == 'sa'){
+        tf = false;
       }
-      String? hex =cor != null ? '#${cor!.value.toRadixString(16).substring(2).toUpperCase()}' : '';
 
-        Map<String, dynamic> dados = {
-        'userId':userId,
-        'imagem': urlImagem, 
-        'cor': hex, 
+      // Converta a cor para HSLuv se a cor não for nula.
+      String? hsluv;
+      if (cor != null) {
+        hsluv = HSLuvColor.fromColor(cor!).toString();
+      }
+
+      Map<String, dynamic> dados = {
+        'userId': userId,
+        'imagem': urlImagem,
+        'hsluv': hsluv, // Store HSLuv color data as a string
         'categoria': tf,
         'ocasiao': selecionad,
         'temperatura': opc,
-         };
+      };
 
       await FirebaseFirestore.instance.collection('roupas').add(dados);
 
-      
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Dados salvos com sucesso!')),
       );
 
-      
       setState(() {
         _imagens.clear();
-        hex = null;
-        cor =null;
+        cor = null;
         tf = null;
         selecionada = false;
         selecionado = null;
         selecionad = null;
         opc = null;
       });
-
     } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Erro ao salvar os dados: $e')),
       );
     }
   }
+
+
 
 
   Future<void> escolher(ImageSource source) async {
