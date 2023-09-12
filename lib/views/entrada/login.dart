@@ -104,7 +104,7 @@ class _LoginState extends State<Login> {
                 }
               },
               child: carregando ? Row(children: [
-                CircularProgressIndicator(color:dois),
+                CircularProgressIndicator(color:tres),
                 Text('Carregando',style:TextStyle(fontSize:23,fontStyle:FontStyle.italic),)
               ],):Text('Login',style:TextStyle(fontSize:30,fontStyle:FontStyle.italic),),
             )

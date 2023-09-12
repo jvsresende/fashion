@@ -139,7 +139,7 @@ class _CadastroState extends State<Cadastro> {
     }
     },
       child: carregando ? Row(children: [
-        CircularProgressIndicator(color:um),
+        CircularProgressIndicator(color:tres),
         Text('Cadastrando',style:TextStyle(fontSize:23,fontStyle:FontStyle.italic),)
       ],):Text('Cadastrar',style:TextStyle(fontSize:30,fontStyle:FontStyle.italic),),
                 ),
