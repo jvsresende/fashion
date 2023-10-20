@@ -165,7 +165,7 @@ class _TodasState extends State<Todas> {
             ),
           )
         ],
-        body:  Container(
+        body: Container(
           width: MediaQuery.of(context).size.width,
           child: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -179,22 +179,53 @@ class _TodasState extends State<Todas> {
               Map<String, dynamic> roupa = _roupas[index];
               String imageUrl = roupa['imagem'];
 
-              return Padding(
-                padding: EdgeInsets.only(top: 10.0),
-                child: Container(
-                  width: 200,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: CachedNetworkImage(
-                      imageUrl: imageUrl,
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                      fit: BoxFit.cover,
+              return GestureDetector(
+                onTap: () {
+                  print('Item $index foi tocado!');
+                },
+                onLongPress: ()=> showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text('Deseja Excluir esta Roupa?'),
+                      content: const Text(
+                          "A exclusão é permanente e não pode ser recuperada posteriormente"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+
+                          },
+                          child: const Text('Cancelar',style: TextStyle(color: tres)),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+
+                          },
+                          child: const Text('Excluir',style: TextStyle(color: Colors.red)),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(top: 10.0),
+                  child: Container(
+                    width: 200,
+                    height: 200,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: CachedNetworkImage(
+                        imageUrl: imageUrl,
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),

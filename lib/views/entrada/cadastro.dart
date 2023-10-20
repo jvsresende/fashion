@@ -1,4 +1,5 @@
 import 'package:firebase/colors.dart';
+import 'package:firebase/views/entrada/inicio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,53 +22,74 @@ class _CadastroState extends State<Cadastro> {
   Future<void> salvarDados() async {
     try {
       if (tecPass.text == tecPass1.text) {
-        await authService.registrar(context,tecEmail.text, tecPass.text);
-      } else if(tecPass.text!=tecPass1.text){
+        await authService.registrar(context, tecEmail.text, tecPass.text);
+        // Mostrar um AlertDialog de sucesso e navegar para a tela principal
         showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                  title: const Text('As Senhas se Diferem'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        setState(() {
-                          tecPass.text = '';
-                          tecPass1.text = '';
-                        });
-                        Navigator.of(context).pop(); // Fechar o AlertDialog
-                      },
-                      child:const Text('Ok',style: TextStyle(color:tres),),
-                    )
-                  ]
-              );
-            }
-        );
-      };
-    } catch (e) {
-      showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-                title: const Text('Erro ao Realizar o Cadastro'),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      setState(() {
-                        tecPass.text = '';
-                        tecPass1.text = '';
-                        tecEmail.text = '';
-                      });
-                      },
-                    child:const Text('Okay',style: TextStyle(color:tres),),
-                  )
-                ]
+              title: const Text('Cadastro Concluído'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Fechar o AlertDialog
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => Principal(), // Substituir pela tela principal
+                    ));
+                  },
+                  child: const Text('Ok', style: TextStyle(color: tres)),
+                )
+              ],
             );
-          }
+          },
+        );
+      } else if (tecPass.text != tecPass1.text) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('As Senhas se Diferem'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      tecPass.text = '';
+                      tecPass1.text = '';
+                    });
+                    Navigator.of(context).pop(); // Fechar o AlertDialog
+                  },
+                  child: const Text('Ok', style: TextStyle(color: tres)),
+                )
+              ],
+            );
+          },
+        );
+      }
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Erro ao Realizar o Cadastro'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  setState(() {
+                    tecPass.text = '';
+                    tecPass1.text = '';
+                    tecEmail.text = '';
+                  });
+                },
+                child: const Text('Okay', style: TextStyle(color: tres)),
+              )
+            ],
+          );
+        },
       );
     }
   }
+
 
   Widget build(BuildContext context) {
     return MaterialApp(

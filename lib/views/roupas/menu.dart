@@ -63,7 +63,7 @@ class _NavegarState extends State<Navegar> {
               PhosphorIcons.regular.shuffle,
               size:30.0,
             ),
-            label: 'Aleatório',
+            label: 'Escolha',
           ),
         ],
 

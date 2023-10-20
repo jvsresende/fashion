@@ -63,27 +63,39 @@ class _EscolherState extends State<Escolher> {
       User? user = _auth.currentUser;
       if (user != null) {
         String userId = user.uid;
-
         QuerySnapshot queryCima = await FirebaseFirestore.instance
             .collection('roupas')
             .where('userId', isEqualTo: userId)
             .where('categoria', whereIn: ['j', 'c', 'bc', 'bl', 'r'])
-            .where('temperatura', isEqualTo: temp )
+            .where('temperatura', isEqualTo: temp)
+            .get();
+
+        QuerySnapshot queryCimaM = await FirebaseFirestore.instance
+            .collection('roupas')
+            .where('userId', isEqualTo: userId)
+            .where('categoria', whereIn: ['j', 'c', 'bc', 'bl', 'r'])
+            .where('temperatura', isEqualTo: 'm')
             .get();
 
         _cima = queryCima.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+        _cima.addAll(queryCimaM.docs.map((doc) => doc.data() as Map<String, dynamic>).toList());
 
-        if('temperatura'=='m'){
-          temp='m';
-        }
         QuerySnapshot queryBaixo = await FirebaseFirestore.instance
             .collection('roupas')
             .where('userId', isEqualTo: userId)
             .where('categoria', whereIn: ['b', 'ca', 's', 'sa'])
-            .where('temperatura', isEqualTo: temp )
+            .where('temperatura', isEqualTo: temp)
+            .get();
+
+        QuerySnapshot queryBaixoM = await FirebaseFirestore.instance
+            .collection('roupas')
+            .where('userId', isEqualTo: userId)
+            .where('categoria', whereIn: ['b', 'ca', 's', 'sa'])
+            .where('temperatura', isEqualTo: 'm')
             .get();
 
         _baixo = queryBaixo.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+        _baixo.addAll(queryBaixoM.docs.map((doc) => doc.data() as Map<String, dynamic>).toList());
 
         aleatorio();
       }
@@ -140,7 +152,7 @@ class _EscolherState extends State<Escolher> {
                   child: Icon(
                     PhosphorIcons.bold.caretLeft,
                     size: 40.0,
-                    color: um,
+                    color: tres,
                   ),
                 ),
                 Container(
@@ -148,7 +160,7 @@ class _EscolherState extends State<Escolher> {
                   height: 300,
                   decoration: BoxDecoration(
                     color: _cimas != null
-                        ? Color(int.parse(_cimas!['cor'].substring(1), radix: 16))
+                        ? Color(int.parse(_cimas!['hex']?.substring(1)??'0', radix: 16))
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -178,7 +190,7 @@ class _EscolherState extends State<Escolher> {
                   child: Icon(
                     PhosphorIcons.bold.caretRight,
                     size: 40.0,
-                    color: um,
+                    color: tres,
                   ),
                 )
               ],
@@ -201,7 +213,7 @@ class _EscolherState extends State<Escolher> {
                   child: Icon(
                     PhosphorIcons.bold.caretLeft,
                     size: 40.0,
-                    color: um,
+                    color: tres,
                   ),
                 ),
                 Container(
@@ -209,7 +221,7 @@ class _EscolherState extends State<Escolher> {
                   height: 300,
                   decoration: BoxDecoration(
                     color: _baixos != null
-                        ? Color(int.parse(_baixos!['cor'].substring(1), radix: 16))
+                        ? Color(int.parse(_baixos!['hex']?.substring(1)??'0', radix: 16))
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -239,7 +251,7 @@ class _EscolherState extends State<Escolher> {
                   child: Icon(
                     PhosphorIcons.bold.caretRight,
                     size: 40.0,
-                    color: um,
+                    color: tres,
                   ),
                 ),
               ],
@@ -322,73 +334,9 @@ class _EscolherState extends State<Escolher> {
                 ],
               ),
             )
-
           ],
         ),
       ),
     );
   }
 }
-
-
-
-/*
-
-      Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: CircleBorder(),
-                  backgroundColor: tres,
-                  foregroundColor: dois,
-                  minimumSize: Size(50, 75),
-                ),
-                onPressed: aleatorio,
-                child: Icon(
-                  PhosphorIcons.regular.shuffle,
-                  size: 30.0,
-                ),
-              ),
-    PopupMenuButton<String>(
-    onSelected: (String escolha) {
-    temp = escolha;
-      },
-    itemBuilder: (BuildContext context) {
-    return <PopupMenuEntry<String>>[
-    PopupMenuItem<String>(
-    value: 'q',
-    child: Text('Quente'),
-    ),
-    PopupMenuItem<String>(
-    value: 'f',
-    child: Text('Frio'),
-    ),
-    PopupMenuItem<String>(
-        value: '',
-        child: Text('Qualquer'),
-      ),
-    ];
-    },icon: Icon(
-      PhosphorIcons.regular.thermometerSimple,
-      color:tres,
-      size: 40.0,
-    ),
-    ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: CircleBorder(),
-                  backgroundColor: tres,
-                  foregroundColor: dois,
-                  minimumSize: Size(50, 75),
-                ),
-                onPressed:escolhas,
-                child: Icon(
-                  PhosphorIcons.regular.cloudSun,
-                  size: 30.0,
-                ),
-              ),
-            ],
-            )
-
- */

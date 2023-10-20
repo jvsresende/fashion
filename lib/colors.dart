@@ -65,3 +65,25 @@ const MaterialColor tresAccent = MaterialColor(_tresAccentValue, <int, Color>{
   700: Color(0xFFC4B9FF),
 });
 const int _tresAccentValue = 0xFFFFFFFF;
+
+const MaterialColor quatro = MaterialColor(_quatroPrimaryValue, <int, Color>{
+  50: Color(0xFFF6E2FA),
+  100: Color(0xFFE7B6F2),
+  200: Color(0xFFD886EA),
+  300: Color(0xFFC855E2),
+  400: Color(0xFFBC30DB),
+  500: Color(_quatroPrimaryValue),
+  600: Color(0xFFA90AD0),
+  700: Color(0xFFA008CA),
+  800: Color(0xFF9706C4),
+  900: Color(0xFF8703BA),
+});
+const int _quatroPrimaryValue = 0xFFB00CD5;
+
+const MaterialColor quatroAccent = MaterialColor(_quatroAccentValue, <int, Color>{
+  100: Color(0xFFF6E3FF),
+  200: Color(_quatroAccentValue),
+  400: Color(0xFFD67DFF),
+  700: Color(0xFFCE63FF),
+});
+const int _quatroAccentValue = 0xFFE6B0FF;
