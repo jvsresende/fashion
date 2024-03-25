@@ -1,12 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../colors.dart';
 import '../../services/auth_service.dart';
 import '../entrada/inicio.dart';
-
 
 class Todas extends StatefulWidget {
   @override
@@ -18,6 +18,7 @@ class _TodasState extends State<Todas> {
   String userId = '';
   String? selecionar;
   String? filtro;
+
   @override
   void initState() {
     super.initState();
@@ -26,20 +27,22 @@ class _TodasState extends State<Todas> {
 
   FirebaseAuth _auth = FirebaseAuth.instance;
   AuthService authService = AuthService();
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseStorage storage = FirebaseStorage.instance;
 
   Future<void> carregarRoupas() async {
     try {
       User? user = _auth.currentUser;
       if (user != null) {
         userId = user.uid;
-        QuerySnapshot<Map<String, dynamic>> snapshot =
-        await FirebaseFirestore.instance
+        QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+            .instance
             .collection('roupas')
             .where('userId', isEqualTo: userId)
-            .where('categoria',isEqualTo: filtro)
+            .where('categoria', isEqualTo: filtro)
             .get();
         List<Map<String, dynamic>> roupas =
-        snapshot.docs.map((doc) => doc.data()).toList();
+            snapshot.docs.map((doc) => doc.data()).toList();
 
         setState(() {
           _roupas = roupas;
@@ -50,7 +53,7 @@ class _TodasState extends State<Todas> {
     }
   }
 
-  Future<void> sair() async{
+  Future<void> sair() async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -65,9 +68,9 @@ class _TodasState extends State<Todas> {
             ),
             TextButton(
               onPressed: () async {
-                await  authService.logout(context);
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Principal()));
-
+                await authService.logout(context);
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => Principal()));
               },
               child: const Text('Sair', style: TextStyle(color: tres)),
             )
@@ -76,16 +79,16 @@ class _TodasState extends State<Todas> {
       },
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:NestedScrollView(
+      body: NestedScrollView(
         headerSliverBuilder: (context, _) => [
           SliverAppBar(
             backgroundColor: um,
             automaticallyImplyLeading: false,
             expandedHeight: 0,
-
             title: PreferredSize(
               preferredSize: Size.fromHeight(kToolbarHeight),
               child: Row(
@@ -93,11 +96,11 @@ class _TodasState extends State<Todas> {
                 children: <Widget>[
                   PopupMenuButton<String>(
                     onSelected: (String escolha) {
-                      if(escolha ==''){
-                        filtro=null;
+                      if (escolha == '') {
+                        filtro = null;
                         carregarRoupas();
-                      }else{
-                        filtro=escolha;
+                      } else {
+                        filtro = escolha;
                         carregarRoupas();
                       }
                     },
@@ -148,10 +151,11 @@ class _TodasState extends State<Todas> {
                           child: Text('Vestido'),
                         ),
                       ];
-                    },icon: Icon(
-                    PhosphorIcons.regular.list,
-                    size: 30.0,
-                  ),
+                    },
+                    icon: Icon(
+                      PhosphorIcons.regular.list,
+                      size: 30.0,
+                    ),
                   ),
                   IconButton(
                     icon: Icon(
@@ -181,9 +185,10 @@ class _TodasState extends State<Todas> {
 
               return GestureDetector(
                 onTap: () {
-                  print('Item $index foi tocado!');
+                  String roupaId = _roupas[index]['id'];
+                  print('Item $index foi tocado! ID do documento: $roupaId');
                 },
-                onLongPress: ()=> showDialog(
+                onLongPress: () => showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
@@ -194,16 +199,31 @@ class _TodasState extends State<Todas> {
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pop();
-
                           },
-                          child: const Text('Cancelar',style: TextStyle(color: tres)),
+                          child: const Text('Cancelar',
+                              style: TextStyle(color: tres)),
                         ),
                         TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
+                          onPressed: () async {
+                            // Obter o id da roupa
+                            String? roupaId = roupa['id'];
 
+                            // Excluir a roupa do Cloud Firestore
+                            await FirebaseFirestore.instance
+                                .collection('roupas')
+                                .doc(roupaId)
+                                .delete();
+
+                            // Excluir a imagem da roupa do Cloud Storage
+                            var imageRef =
+                                FirebaseStorage.instance.refFromURL(imageUrl);
+                            await imageRef.delete();
+                            carregarRoupas();
+                            // Fechar o diálogo
+                            Navigator.of(context).pop();
                           },
-                          child: const Text('Excluir',style: TextStyle(color: Colors.red)),
+                          child: const Text('Excluir',
+                              style: TextStyle(color: Colors.red)),
                         ),
                       ],
                     );

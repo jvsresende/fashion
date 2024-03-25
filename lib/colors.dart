@@ -80,7 +80,8 @@ const MaterialColor quatro = MaterialColor(_quatroPrimaryValue, <int, Color>{
 });
 const int _quatroPrimaryValue = 0xFFB00CD5;
 
-const MaterialColor quatroAccent = MaterialColor(_quatroAccentValue, <int, Color>{
+const MaterialColor quatroAccent =
+    MaterialColor(_quatroAccentValue, <int, Color>{
   100: Color(0xFFF6E3FF),
   200: Color(_quatroAccentValue),
   400: Color(0xFFD67DFF),

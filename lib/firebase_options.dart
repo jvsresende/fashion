@@ -51,12 +51,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyBS2qC3fx5TZEAbd6I4ddYncJqcA8JkryM',
-    appId: '1:88533224310:web:54f4f567e6dbafc809c857',
+    appId: '1:88533224310:web:e39bf40dccf2250309c857',
     messagingSenderId: '88533224310',
     projectId: 'fashion-c377b',
     authDomain: 'fashion-c377b.firebaseapp.com',
     storageBucket: 'fashion-c377b.appspot.com',
-    measurementId: 'G-D02W1DFBGQ',
+    measurementId: 'G-WKDHQ75X63',
   );
 
   static const FirebaseOptions android = FirebaseOptions(

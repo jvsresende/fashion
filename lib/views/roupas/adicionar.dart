@@ -123,9 +123,7 @@ class _AdState extends State<Ad> {
       }
       if (cor != null) {
         hsluv = HSLuvColor.fromColor(cor!).toString();
-
       }
-
 
       Map<String, dynamic> dados = {
         'userId': userId,
@@ -134,10 +132,13 @@ class _AdState extends State<Ad> {
         'categoria': selecionado,
         'temperatura': opc,
         'corIdentificada': corIdentificada,
-
       };
 
-      await FirebaseFirestore.instance.collection('roupas').add(dados);
+      DocumentReference documentReference =
+          await FirebaseFirestore.instance.collection('roupas').add(dados);
+
+// Salvar o ID gerado automaticamente como um campo no documento
+      await documentReference.update({'id': documentReference.id});
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Dados salvos com sucesso!')),
@@ -259,10 +260,10 @@ class _AdState extends State<Ad> {
                         child: selecionada
                             ? Image.file(_imagens.last, fit: BoxFit.cover)
                             : Icon(
-                          PhosphorIcons.regular.cameraPlus,
-                          size: 60.0,
-                          color: dois,
-                        )),
+                                PhosphorIcons.regular.cameraPlus,
+                                size: 60.0,
+                                color: dois,
+                              )),
                   ),
                 ),
                 SizedBox(height: 40),
@@ -312,8 +313,10 @@ class _AdState extends State<Ad> {
                     style: TextStyle(color: dois, fontSize: 16),
                     items: const [
                       DropdownMenuItem(child: Text("Categoria"), value: ""),
-                      DropdownMenuItem(child: Text('Blusa Manga Curta'), value: 'bc'),
-                      DropdownMenuItem(child: Text('Blusa Manga Longa'), value: 'bl'),
+                      DropdownMenuItem(
+                          child: Text('Blusa Manga Curta'), value: 'bc'),
+                      DropdownMenuItem(
+                          child: Text('Blusa Manga Longa'), value: 'bl'),
                       DropdownMenuItem(child: Text('Regata'), value: 'r'),
                       DropdownMenuItem(child: Text('Jaqueta'), value: 'j'),
                       DropdownMenuItem(child: Text('Casacos'), value: 'c'),
@@ -360,7 +363,7 @@ class _AdState extends State<Ad> {
                                 });
                               },
                             ),
-                            const Text('Fria',style: TextStyle(color: tres)),
+                            const Text('Fria', style: TextStyle(color: tres)),
                           ],
                         ),
                       ),
@@ -425,7 +428,8 @@ class _AdState extends State<Ad> {
                         });
                       },
                       child: Text('Cancelar',
-                          style: TextStyle(fontSize: 30, fontStyle: FontStyle.italic)),
+                          style: TextStyle(
+                              fontSize: 30, fontStyle: FontStyle.italic)),
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -444,20 +448,22 @@ class _AdState extends State<Ad> {
                         } catch (e) {
                           setState(() => carregando = false);
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Erro ao salvar os dados: $e')),
+                            SnackBar(
+                                content: Text('Erro ao salvar os dados: $e')),
                           );
                         }
                       },
                       child: carregando
                           ? Row(children: [
-                        CircularProgressIndicator(color: um),
-                        Text('  Enviando',
-                            style: TextStyle(
-                                fontSize: 23, fontStyle: FontStyle.italic)),
-                      ])
+                              CircularProgressIndicator(color: um),
+                              Text('  Enviando',
+                                  style: TextStyle(
+                                      fontSize: 23,
+                                      fontStyle: FontStyle.italic)),
+                            ])
                           : Text('Enviar',
-                          style: TextStyle(
-                              fontSize: 30, fontStyle: FontStyle.italic)),
+                              style: TextStyle(
+                                  fontSize: 30, fontStyle: FontStyle.italic)),
                     ),
                   ],
                 )

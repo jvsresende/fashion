@@ -22,49 +22,50 @@ class _LoginState extends State<Login> {
     try {
       if (await validarLogin()) {
         await authService.login(context, tecEmail.text, tecPass.text);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Navegar(0)));
-
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => Navegar(0)));
       } else {
-            showDialog(
-            context: context,
-            builder: (BuildContext context) {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
             return AlertDialog(
-            title: const Text('Email/Senha Inválidos'),
-            actions: [
-            TextButton(
-            onPressed: () {
-            Navigator.pop(context);
-            },
-            child: const Text('OK', style: TextStyle(color:tres)),
-            ),
-            ],
+              title: const Text('Email/Senha Inválidos'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('OK', style: TextStyle(color: tres)),
+                ),
+              ],
             );
-            },
-            );
-            }
-        } catch (e) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Erro ao Realizar o Login'),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('OK', style: TextStyle(color: Colors.red)),
-                  ),
-                ],
-              );
-            },
-          );
-        }
+          },
+        );
       }
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Erro ao Realizar o Login'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('OK', style: TextStyle(color: Colors.red)),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
   Future<bool> validarLogin() async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: tecEmail.text,
         password: tecPass.text,
       );
@@ -73,6 +74,7 @@ class _LoginState extends State<Login> {
       return false;
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -117,11 +119,17 @@ class _LoginState extends State<Login> {
               Pass(tecPass),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Redefinir()));
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => Redefinir()));
                 },
                 child: Align(
                   alignment: Alignment(0.8, 0),
-                  child: Text('Esqueceu a senha', style: TextStyle(color: dois, decoration: TextDecoration.underline, fontSize: 18),
+                  child: Text(
+                    'Esqueceu a senha',
+                    style: TextStyle(
+                        color: dois,
+                        decoration: TextDecoration.underline,
+                        fontSize: 18),
                   ),
                 ),
               ),
@@ -131,7 +139,8 @@ class _LoginState extends State<Login> {
                   foregroundColor: tres,
                   minimumSize: Size(270, 50),
                   maximumSize: Size(270, 50),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
                 ),
                 onPressed: () async {
                   if (carregando) return;
@@ -146,14 +155,22 @@ class _LoginState extends State<Login> {
                     setState(() => carregando = false);
                   }
                 },
-                child: carregando ? Row(
-                  children: [
-                    CircularProgressIndicator(color: tres),
-                    Text('Carregando', style: TextStyle(fontSize: 23, fontStyle: FontStyle.italic),
-                    )
-                  ],
-                ) : Text('Login', style: TextStyle(fontSize: 30, fontStyle: FontStyle.italic),
-                ),
+                child: carregando
+                    ? Row(
+                        children: [
+                          CircularProgressIndicator(color: tres),
+                          Text(
+                            'Carregando',
+                            style: TextStyle(
+                                fontSize: 23, fontStyle: FontStyle.italic),
+                          )
+                        ],
+                      )
+                    : Text(
+                        'Login',
+                        style: TextStyle(
+                            fontSize: 30, fontStyle: FontStyle.italic),
+                      ),
               )
             ],
           ),
@@ -165,6 +182,7 @@ class _LoginState extends State<Login> {
 
 class Email extends StatelessWidget {
   TextEditingController tecEmail;
+
   Email(this.tecEmail);
 
   @override
@@ -194,6 +212,7 @@ class Email extends StatelessWidget {
 
 class Pass extends StatelessWidget {
   TextEditingController tecPass;
+
   Pass(this.tecPass);
 
   @override

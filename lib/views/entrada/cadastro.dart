@@ -1,11 +1,10 @@
 import 'package:firebase/colors.dart';
 import 'package:firebase/views/entrada/inicio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import '../../services/auth_service.dart';
 
+import '../../services/auth_service.dart';
 
 class Cadastro extends StatefulWidget {
   @override
@@ -34,7 +33,8 @@ class _CadastroState extends State<Cadastro> {
                   onPressed: () {
                     Navigator.of(context).pop(); // Fechar o AlertDialog
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => Principal(), // Substituir pela tela principal
+                      builder: (context) =>
+                          Principal(), // Substituir pela tela principal
                     ));
                   },
                   child: const Text('Ok', style: TextStyle(color: tres)),
@@ -90,91 +90,110 @@ class _CadastroState extends State<Cadastro> {
     }
   }
 
-
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(scaffoldBackgroundColor: um,
+      theme: ThemeData(
+        scaffoldBackgroundColor: um,
         primarySwatch: dois,
         textTheme: GoogleFonts.handleeTextTheme(),
         inputDecorationTheme: InputDecorationTheme(
-            filled:true,
+            filled: true,
             fillColor: dois,
-            contentPadding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+            contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(color: tres),
             ),
-            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10),borderSide: BorderSide(color:tres)),
-            hintStyle: TextStyle(color: tres,)
-        ),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: tres)),
+            hintStyle: TextStyle(
+              color: tres,
+            )),
         snackBarTheme: SnackBarThemeData(
           backgroundColor: dois, // Defina a cor de fundo desejada
-          contentTextStyle: TextStyle(color: tres), // Defina o estilo do texto do SnackBar
+          contentTextStyle:
+              TextStyle(color: tres), // Defina o estilo do texto do SnackBar
         ),
       ),
       home: Scaffold(
           body: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    margin: EdgeInsets.only(top: 190),
-                    child: Text(
-                      'Cadastro',
-                      style: TextStyle(color: dois, fontSize: 60, height: 1.2),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                margin: EdgeInsets.only(top: 190),
+                child: Text(
+                  'Cadastro',
+                  style: TextStyle(color: dois, fontSize: 60, height: 1.2),
+                  textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 70),
-                Email(tecEmail),
-                SizedBox(height: 15),
-                Pass(tecPass),
-                SizedBox(height: 15),
-                Pass1(tecPass1),
-                SizedBox(height: 15),
-                Text('A Senha deverá ter no Minimo 6 Caracteres',style: TextStyle(color:dois,fontSize: 15),),
-                SizedBox(height:10),
-                SizedBox(height: 70),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: tres,
-                    minimumSize: Size(270, 50),
-                    maximumSize: Size(270,50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  onPressed: ()async{
-    if (carregando) return;
-    setState(() => carregando = true);
-    try {
-    await salvarDados();
-    setState(() => carregando = false);
-    } catch (e) {
-    setState(() => carregando = false);
-    ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text('Erro ao salvar os dados: $e')),
-    );
-    }
-    },
-      child: carregando ? Row(children: [
-        CircularProgressIndicator(color:tres),
-        Text('Cadastrando',style:TextStyle(fontSize:23,fontStyle:FontStyle.italic),)
-      ],):Text('Cadastrar',style:TextStyle(fontSize:30,fontStyle:FontStyle.italic),),
-                ),
-              ],
+              ),
             ),
-          )
-
-      ),
+            SizedBox(height: 70),
+            Email(tecEmail),
+            SizedBox(height: 15),
+            Pass(tecPass),
+            SizedBox(height: 15),
+            Pass1(tecPass1),
+            SizedBox(height: 15),
+            Text(
+              'A Senha deverá ter no Minimo 6 Caracteres',
+              style: TextStyle(color: dois, fontSize: 15),
+            ),
+            SizedBox(height: 10),
+            SizedBox(height: 70),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                foregroundColor: tres,
+                minimumSize: Size(270, 50),
+                maximumSize: Size(270, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () async {
+                if (carregando) return;
+                setState(() => carregando = true);
+                try {
+                  await salvarDados();
+                  setState(() => carregando = false);
+                } catch (e) {
+                  setState(() => carregando = false);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Erro ao salvar os dados: $e')),
+                  );
+                }
+              },
+              child: carregando
+                  ? Row(
+                      children: [
+                        CircularProgressIndicator(color: tres),
+                        Text(
+                          'Cadastrando',
+                          style: TextStyle(
+                              fontSize: 23, fontStyle: FontStyle.italic),
+                        )
+                      ],
+                    )
+                  : Text(
+                      'Cadastrar',
+                      style:
+                          TextStyle(fontSize: 30, fontStyle: FontStyle.italic),
+                    ),
+            ),
+          ],
+        ),
+      )),
     );
-  }}
+  }
+}
 
 class Email extends StatelessWidget {
   TextEditingController tecEmail;
+
   Email(this.tecEmail);
 
   @override
@@ -202,9 +221,9 @@ class Email extends StatelessWidget {
   }
 }
 
-
 class Pass extends StatelessWidget {
   TextEditingController tecPass;
+
   Pass(this.tecPass);
 
   @override
@@ -234,6 +253,7 @@ class Pass extends StatelessWidget {
 
 class Pass1 extends StatelessWidget {
   TextEditingController tecPass1;
+
   Pass1(this.tecPass1);
 
   @override

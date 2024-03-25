@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "88533224310",
+    "project_id": "fashion-c377b",
+    "storage_bucket": "fashion-c377b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:88533224310:android:a30ace139087977809c857",
+        "android_client_info": {
+          "package_name": "com.example.firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "88533224310-vsg9jn2jdbl3thqprsvvl7ch1esqfu0n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCC4ku7E-2woIFcTrBe7cPU2GOyC7me2ls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "88533224310-vsg9jn2jdbl3thqprsvvl7ch1esqfu0n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

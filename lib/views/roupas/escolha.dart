@@ -38,18 +38,20 @@ class _EscolherState extends State<Escolher> {
         QuerySnapshot queryCima = await FirebaseFirestore.instance
             .collection('roupas')
             .where('userId', isEqualTo: userId)
-            .where('categoria',  whereIn: ['j', 'c', 'bc', 'bl', 'r'])
-            .get();
+            .where('categoria', whereIn: ['j', 'c', 'bc', 'bl', 'r']).get();
 
-        _cima = queryCima.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+        _cima = queryCima.docs
+            .map((doc) => doc.data() as Map<String, dynamic>)
+            .toList();
 
         QuerySnapshot queryBaixo = await FirebaseFirestore.instance
             .collection('roupas')
             .where('userId', isEqualTo: userId)
-            .where('categoria', whereIn: ['b', 'ca', 's', 'sa'])
-            .get();
+            .where('categoria', whereIn: ['b', 'ca', 's', 'sa']).get();
 
-        _baixo = queryBaixo.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+        _baixo = queryBaixo.docs
+            .map((doc) => doc.data() as Map<String, dynamic>)
+            .toList();
 
         aleatorio();
       }
@@ -77,8 +79,12 @@ class _EscolherState extends State<Escolher> {
             .where('temperatura', isEqualTo: 'm')
             .get();
 
-        _cima = queryCima.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
-        _cima.addAll(queryCimaM.docs.map((doc) => doc.data() as Map<String, dynamic>).toList());
+        _cima = queryCima.docs
+            .map((doc) => doc.data() as Map<String, dynamic>)
+            .toList();
+        _cima.addAll(queryCimaM.docs
+            .map((doc) => doc.data() as Map<String, dynamic>)
+            .toList());
 
         QuerySnapshot queryBaixo = await FirebaseFirestore.instance
             .collection('roupas')
@@ -94,8 +100,12 @@ class _EscolherState extends State<Escolher> {
             .where('temperatura', isEqualTo: 'm')
             .get();
 
-        _baixo = queryBaixo.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
-        _baixo.addAll(queryBaixoM.docs.map((doc) => doc.data() as Map<String, dynamic>).toList());
+        _baixo = queryBaixo.docs
+            .map((doc) => doc.data() as Map<String, dynamic>)
+            .toList();
+        _baixo.addAll(queryBaixoM.docs
+            .map((doc) => doc.data() as Map<String, dynamic>)
+            .toList());
 
         aleatorio();
       }
@@ -103,10 +113,11 @@ class _EscolherState extends State<Escolher> {
       print('Erro ao carregar as roupas: $e');
     }
   }
-  void escolhas(){
-    if(temp==''){
+
+  void escolhas() {
+    if (temp == '') {
       carregar();
-    }else{
+    } else {
       temperatura();
     }
   }
@@ -160,19 +171,20 @@ class _EscolherState extends State<Escolher> {
                   height: 300,
                   decoration: BoxDecoration(
                     color: _cimas != null
-                        ? Color(int.parse(_cimas!['hex']?.substring(1)??'0', radix: 16))
+                        ? Color(int.parse(_cimas!['hex']?.substring(1) ?? '0',
+                            radix: 16))
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: _cimas != null
                       ? CachedNetworkImage(
-                    imageUrl: _cimas!['imagem'],
-                    placeholder: (context, url) =>
-                        CircularProgressIndicator(),
-                    errorWidget: (context, url, error) =>
-                        Icon(Icons.error),
-                    fit: BoxFit.cover,
-                  )
+                          imageUrl: _cimas!['imagem'],
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                          fit: BoxFit.cover,
+                        )
                       : Placeholder(),
                 ),
                 GestureDetector(
@@ -221,19 +233,20 @@ class _EscolherState extends State<Escolher> {
                   height: 300,
                   decoration: BoxDecoration(
                     color: _baixos != null
-                        ? Color(int.parse(_baixos!['hex']?.substring(1)??'0', radix: 16))
+                        ? Color(int.parse(_baixos!['hex']?.substring(1) ?? '0',
+                            radix: 16))
                         : Colors.transparent,
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: _baixos != null
                       ? CachedNetworkImage(
-                    imageUrl: _baixos!['imagem'],
-                    placeholder: (context, url) =>
-                        CircularProgressIndicator(),
-                    errorWidget: (context, url, error) =>
-                        Icon(Icons.error),
-                    fit: BoxFit.cover,
-                  )
+                          imageUrl: _baixos!['imagem'],
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                          fit: BoxFit.cover,
+                        )
                       : Placeholder(),
                 ),
                 GestureDetector(

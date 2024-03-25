@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:firebase/colors.dart';
-import 'package:firebase/views/roupas/todas.dart';
-import 'package:firebase/views/roupas/escolha.dart';
 import 'package:firebase/views/roupas/adicionar.dart';
+import 'package:firebase/views/roupas/escolha.dart';
+import 'package:firebase/views/roupas/todas.dart';
+import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-
 
 int _selectedIndex = 0;
 
@@ -24,9 +23,8 @@ class Navegar extends StatefulWidget {
 }
 
 class _NavegarState extends State<Navegar> {
-
-
   _NavegarState(this._opcao);
+
   int _opcao;
 
   @override
@@ -34,18 +32,15 @@ class _NavegarState extends State<Navegar> {
     _selectedIndex = _opcao;
   }
 
-
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       body: _stOptions.elementAt(_selectedIndex),
-
-
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: um,
         showUnselectedLabels: false,
-        items:  <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon:Icon(
+            icon: Icon(
               PhosphorIcons.regular.coatHanger,
               size: 30.0,
             ),
@@ -54,33 +49,28 @@ class _NavegarState extends State<Navegar> {
           BottomNavigationBarItem(
             icon: Icon(
               PhosphorIcons.regular.plusCircle,
-              size:30.0,
+              size: 30.0,
             ),
             label: 'Adicionar',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               PhosphorIcons.regular.shuffle,
-              size:30.0,
+              size: 30.0,
             ),
             label: 'Escolha',
           ),
         ],
-
         unselectedItemColor: Colors.white38,
-
         currentIndex: _selectedIndex,
-
         selectedItemColor: dois,
-
-        onTap:
-        _onItemTapped,
+        onTap: _onItemTapped,
       ),
     );
   }
 
   @override
-  void _onItemTapped(int  index) {
+  void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
